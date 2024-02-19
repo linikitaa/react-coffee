@@ -1,24 +1,31 @@
 
 .coffee-block {
-  width: 280px;
+  max-width: 300px;
   text-align: center;
   margin-bottom: 65px;
 
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   &:not(:nth-of-type(4n)) {
-    margin-right: 35px;
+    //margin-right: 35px;
   }
 
-  &__image {
-    width: 260px;
+  &_image {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    width: 300px;
   }
+  &_text {
+    min-height: 55px;
+    margin-bottom: 10px;
 
-  &__title {
+  }
+  &_title {
     font-size: 20px;
     font-weight: 900;
-    margin-bottom: 20px;
   }
 
-  &__selector {
+  &_selector {
     display: flex;
     background-color: #f3f3f3;
     border-radius: 10px;
@@ -29,9 +36,6 @@
       display: flex;
       flex: 1;
 
-      &:first-of-type {
-        margin-bottom: 6px;
-      }
 
       li {
         padding: 8px;
@@ -49,17 +53,20 @@
     }
   }
 
-  &__bottom {
+  &_bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 20px;
+    padding: 10px;
   }
 
-  &__price {
+  &_price {
     font-weight: bold;
     font-size: 22px;
     line-height: 27px;
     letter-spacing: 0.015em;
   }
+
+
 }

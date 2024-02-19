@@ -1,17 +1,19 @@
 import React, {useState} from "react";
 import '../../scss/coffee-block.scss'
 import '../../scss/button.scss'
+import {CoffeeType} from "../../assets/coffee";
 
 type CoffeeBlockProps = {
-    id:number
-    title:string
-    price:number
-    image:string
-    sizes:number[]
-    subtitle:string
+    data: CoffeeType
+    // id:number
+    // title:string
+    // price:number
+    // image:string
+    // sizes:number[]
+    // subtitle:string
 }
 
-export function CoffeeBlock({id,title,price,image,sizes,subtitle}:CoffeeBlockProps) {
+export function CoffeeBlock({data}:CoffeeBlockProps) {
 
     const[activeSize, setActiveSize]=useState(0)
     const[count,setCount]=useState(0)
@@ -24,15 +26,15 @@ export function CoffeeBlock({id,title,price,image,sizes,subtitle}:CoffeeBlockPro
     }
     return (
         <div className={'coffee-block'}>
-            <img src={image} alt="coffee" width={'100%'}/>
+            <img className={'coffee-block_image'} src={data.imageUrl} alt="coffee" width={'100%'}/>
             <div className={'coffee-block_text'}>
-                <h4 className={'coffee-block_title'}>{title}</h4>
-                <p>{subtitle}</p>
+                <h4 className={'coffee-block_title'}>{data.title}</h4>
+                <p>{data.subtitle}</p>
             </div>
             <div className={'coffee-block_selector'}>
                 <ul>
                     {
-                        sizes.map((size,i)=>
+                        data.sizes.map((size,i)=>
                             <li key={i}
                                 className={activeSize === i ? 'active' : ''}
                                 onClick={()=>onClickActiveSize(i)}
@@ -42,7 +44,7 @@ export function CoffeeBlock({id,title,price,image,sizes,subtitle}:CoffeeBlockPro
                 </ul>
             </div>
             <div className="coffee-block_bottom">
-                <div className="coffee-block_price">{price} руб.</div>
+                <div className="coffee-block_price">{data.price} руб.</div>
                 <div className="button button-outline button-add" onClick={onClickCount}>
                     Добавить
                     <i>{count}</i>
