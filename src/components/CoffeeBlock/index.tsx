@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import '../../scss/coffee-block.scss'
+
+import style from './coffeeBlock.module.scss'
 import '../../scss/button.scss'
 import {CoffeeType} from "../../assets/coffee";
 
@@ -25,26 +26,28 @@ export function CoffeeBlock({data}:CoffeeBlockProps) {
         setCount(count+1)
     }
     return (
-        <div className={'coffee-block'}>
-            <img className={'coffee-block_image'} src={data.imageUrl} alt="coffee" width={'100%'}/>
-            <div className={'coffee-block_text'}>
-                <h4 className={'coffee-block_title'}>{data.title}</h4>
+        <div className={style.coffeeBlock}>
+            <img className={style.image} src={data.imageUrl}
+                 alt="coffee"
+                 width={'100%'}/>
+            <div className={style.text}>
+                <h4 className={style.title}>{data.title}</h4>
                 <p>{data.subtitle}</p>
             </div>
-            <div className={'coffee-block_selector'}>
+            <div className={style.selector}>
                 <ul>
                     {
                         data.sizes.map((size,i)=>
                             <li key={i}
-                                className={activeSize === i ? 'active' : ''}
+                                className={activeSize === i ? style.active : ''}
                                 onClick={()=>onClickActiveSize(i)}
                             >{size} мл.</li>
                         )
                     }
                 </ul>
             </div>
-            <div className="coffee-block_bottom">
-                <div className="coffee-block_price">{data.price} руб.</div>
+            <div className={style.bottom}>
+                <div className={style.price}>{data.price} руб.</div>
                 <div className="button button-outline button-add" onClick={onClickCount}>
                     Добавить
                     <i>{count}</i>
