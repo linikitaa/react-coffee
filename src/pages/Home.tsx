@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {HomeRootStateType} from "../redux/store";
 import {changeCategoryIdAC} from "../redux/reducers/categoriesReducer";
 import {changeSortAC} from "../redux/reducers/sortReducer";
+import {Pagination} from "../components/Pagination/Pagination";
 
 type HomeProps = {
 }
@@ -15,8 +16,9 @@ const Home = ({}:HomeProps) => {
 
     let categoryId = useSelector<HomeRootStateType,number>(state=> state.categoryId)
     let sortType = useSelector<HomeRootStateType,ListSortType>(state=> state.sort)
+    const searchValue:string = useSelector<HomeRootStateType,string>(state => state.search)
+
     const dispatch = useDispatch()
-    debugger
 
     const [items, setItems] = useState<CoffeeType[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -24,10 +26,11 @@ const Home = ({}:HomeProps) => {
     const category = categoryId ? `&category=${categoryId}` : ''
     const sortBy = sortType.sortProperty.replace('-','')
     const order = sortType.sortProperty.includes('-') ? 'asc': 'desc'
-    // const search = searchValue ? `&search=${searchValue}` : ''
+    const search = searchValue ? `&search=${searchValue}` : ''
+
 
     useEffect(() => {
-        fetch(`https://65d3469a522627d5010878d6.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`)
+        fetch(`https://65d3469a522627d5010878d6.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`)
             .then(res => {
                 return res.json()
             })
@@ -36,7 +39,7 @@ const Home = ({}:HomeProps) => {
                 setIsLoading(false)
             })
         window.scrollTo(0, 0)
-    }, [categoryId, sortType]);
+    }, [categoryId, sortType,order,search]);
 
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index}/>)
     // const searchFiltered = items.filter(el=> el.title.toLowerCase().includes(searchValue.toLowerCase()))
@@ -63,6 +66,7 @@ const Home = ({}:HomeProps) => {
                             : ''
                 }
             </div>
+            <Pagination/>
         </>
     );
 };

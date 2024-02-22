@@ -8,6 +8,8 @@ import {Header} from "./components/Header/Header";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Cart from "./pages/Cart";
+import {useDispatch, useSelector} from "react-redux";
+import {HomeRootStateType} from "./redux/store";
 
 // export const SearchContext = createContext({
 //     searchValue:'',
@@ -16,7 +18,7 @@ import Cart from "./pages/Cart";
 
 function App() {
 
-    const [searchValue, setSearchValue] = useState('')
+
 
     return (
         <div className={'wrapper'}>
