@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import style from './sort.module.scss'
 
@@ -14,25 +14,42 @@ export type ListSortType = {
 
 export function Sort({value, onChangeSort}: SortProps) {
     const [open, setOpen] = useState(false)
-    const list:ListSortType[] = [
-        {name: "популярности(DESC)", sortProperty:'-rating'},
-        {name: "популярности(ASC)", sortProperty:'rating'},
-        {name: 'цене(DESC)', sortProperty:'-price'},
-        {name: 'цене(ASC)', sortProperty:'price'},
-        {name: 'алфавиту(DESC)', sortProperty:'-title'},
-        {name: 'алфавиту(ASC)', sortProperty:'title'}
+    const popupRef = useRef<HTMLDivElement>(null);
+
+    const list: ListSortType[] = [
+        {name: "популярности(DESC)", sortProperty: '-rating'},
+        {name: "популярности(ASC)", sortProperty: 'rating'},
+        {name: 'цене(DESC)', sortProperty: '-price'},
+        {name: 'цене(ASC)', sortProperty: 'price'},
+        {name: 'алфавиту(DESC)', sortProperty: '-title'},
+        {name: 'алфавиту(ASC)', sortProperty: 'title'}
     ]
 
-    const onClickOpen = () => {
-        setOpen(!open)
-    }
-    const onClickListItem = (obj:{name: string, sortProperty: string}) => {
+    const onClickListItem = (obj: { name: string, sortProperty: string }) => {
         onChangeSort(obj.name, obj.sortProperty)
         setOpen(false)
     }
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (open && popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('click', handleClickOutside);
+
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [open]);
+
+    const handleTogglePopup = () => {
+        setOpen(prevState => !prevState);
+    };
+
     return (
-        <div className={style.sort}>
+        <div className={style.sort} onClick={(e) => e.stopPropagation()}>
             <div className={style.label}>
                 <svg
                     width="10"
@@ -47,23 +64,25 @@ export function Sort({value, onChangeSort}: SortProps) {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={onClickOpen}>{value.name}</span>
+                <span onClick={handleTogglePopup}>{value.name}</span>
             </div>
             {
-                open && <div className={style.popup}>
-                    <ul>
-                        {
-                            list.map((obj, i) => {
-                                return <li key={i}
-                                           className={value.sortProperty === obj.sortProperty ? 'active' : ''}
-                                           onClick={() => onClickListItem(obj)}
-                                >{obj.name}</li>
-                            })
-                        }
-                    </ul>
-                </div>
+                open && (
+                    <div className={style.popup} ref={popupRef}>
+                        <ul>
+                            {list.map((obj, i) => (
+                                <li
+                                    key={i}
+                                    className={value.sortProperty === obj.sortProperty ? 'active' : ''}
+                                    onClick={() => onClickListItem(obj)}
+                                >
+                                    {obj.name}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )
             }
-
         </div>
     )
 }

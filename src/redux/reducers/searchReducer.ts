@@ -4,7 +4,6 @@ export const searchReducer = (state = initialState, action: SearchInputAC) => {
     switch (action.type) {
         case 'SEARCH': {
             return action.payload.value
-
         }
         default:
             return state

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 import style from './header.module.scss'
 import logo from '../../assets/icons/logo.svg'
-import {Search} from "../Search";
+import {Search} from "../Search/Search";
 
 
 type HeaderProps = {

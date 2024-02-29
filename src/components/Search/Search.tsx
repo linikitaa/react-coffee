@@ -13,14 +13,14 @@ import {searchInputAC} from "../../redux/reducers/searchReducer";
 
 export const Search = () => {
 
-    const searchValue:string = useSelector<HomeRootStateType,string>(state => state.search)
+    // const searchValue:string = useSelector<HomeRootStateType,string>(state => state.search)
     const dispatch = useDispatch()
     const [valueInput,setValueInput]=useState<string>('')
 
     const updateSearchValue = useCallback(
         debounce((value) => {
             dispatch(searchInputAC(value))
-    }, 500),[])
+    }, 250),[])
 
     const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
         setValueInput(e.currentTarget.value)
@@ -30,8 +30,8 @@ export const Search = () => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const onClickClearInput = () => {
-        // dispatch(searchInputAC(''))
         setValueInput('')
+        dispatch(searchInputAC(''))
         inputRef.current!.focus();
     }
 
@@ -45,7 +45,7 @@ export const Search = () => {
             />
             <img src={loupe} className={styles.image} alt="#" width={'25px'} height={'25px'}/>
             {
-                searchValue &&
+                valueInput &&
                 <img className={styles.clear}
                      onClick={onClickClearInput}
                      src={close}

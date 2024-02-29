@@ -1,14 +1,12 @@
 import {combineReducers, createStore} from "redux";
-import {categoriesReducer} from "./reducers/categoriesReducer";
-import {sortReducer} from "./reducers/sortReducer";
 import {searchReducer} from "./reducers/searchReducer";
+import {filterReducers} from "./reducers/filterReducers";
 
 
 
 const rootReducer = combineReducers({
-    categoryId:categoriesReducer,
-    sort:sortReducer,
-    search:searchReducer,
+    filter: filterReducers,
+    search: searchReducer,
 })
 
 export const store = createStore(rootReducer)

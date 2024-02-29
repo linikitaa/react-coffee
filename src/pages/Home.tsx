@@ -1,58 +1,51 @@
 import React, {useEffect, useState} from 'react';
 import {Categories} from "../components/Categories/Categories";
-import {ListSortType, Sort} from "../components/Sort/Sort";
+import {Sort} from "../components/Sort/Sort";
 import Skeleton from "../components/CoffeeBlock/Skeleton";
 import {CoffeeBlock} from "../components/CoffeeBlock";
 import {CoffeeType} from "../assets/coffee";
 import {useDispatch, useSelector} from "react-redux";
 import {HomeRootStateType} from "../redux/store";
-import {changeCategoryIdAC} from "../redux/reducers/categoriesReducer";
-import {changeSortAC} from "../redux/reducers/sortReducer";
 import {Pagination} from "../components/Pagination/Pagination";
+import axios from "axios";
+import {changeCategoryIdAC, changeSortAC, FilterState, onChangePageAC} from "../redux/reducers/filterReducers";
 
-type HomeProps = {
-}
-const Home = ({}:HomeProps) => {
-
-    let categoryId = useSelector<HomeRootStateType,number>(state=> state.categoryId)
-    let sortType = useSelector<HomeRootStateType,ListSortType>(state=> state.sort)
-    const searchValue:string = useSelector<HomeRootStateType,string>(state => state.search)
-
+type HomeProps = {}
+const Home = ({}: HomeProps) => {
+    const {categoryId , sort, currentPage } =
+        useSelector<HomeRootStateType, FilterState>(state => state.filter)
+    const searchValue: string = useSelector<HomeRootStateType, string>(state => state.search)
     const dispatch = useDispatch()
 
     const [items, setItems] = useState<CoffeeType[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
-    const category = categoryId ? `&category=${categoryId}` : ''
-    const sortBy = sortType.sortProperty.replace('-','')
-    const order = sortType.sortProperty.includes('-') ? 'asc': 'desc'
-    const search = searchValue ? `&search=${searchValue}` : ''
 
 
     useEffect(() => {
-        fetch(`https://65d3469a522627d5010878d6.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`)
-            .then(res => {
-                return res.json()
-            })
-            .then(arr => {
-                setItems(arr)
+
+        const category = categoryId ? `&category=${categoryId}` : ''
+        const sortBy = sort.sortProperty.replace('-', '')
+        const order = sort.sortProperty.includes('-') ? 'asc' : 'desc'
+        const search = searchValue ? `&search=${searchValue}` : ''
+
+        axios.get(`https://65d3469a522627d5010878d6.mockapi.io/items?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search})`)
+            .then((res) => {
+                setItems(res.data)
                 setIsLoading(false)
             })
-        window.scrollTo(0, 0)
-    }, [categoryId, sortType,order,search]);
+    }, [categoryId, sort.sortProperty, searchValue,currentPage]);
 
-    const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index}/>)
+
     // const searchFiltered = items.filter(el=> el.title.toLowerCase().includes(searchValue.toLowerCase()))
-
-
-
+    const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index}/>)
     return (
         <>
             <div className={'content_top'}>
                 <Categories categoryId={categoryId}
-                            onClickCategory={(i: number) => dispatch(changeCategoryIdAC(i))}
+                            onChangeCategory={(i: number) => dispatch(changeCategoryIdAC(i))}
                 />
-                <Sort value={sortType}
+                <Sort value={sort}
                       onChangeSort={(name: string, sortProperty: string) => dispatch(changeSortAC(name, sortProperty))}
                 />
             </div>
@@ -66,7 +59,9 @@ const Home = ({}:HomeProps) => {
                             : ''
                 }
             </div>
-            <Pagination/>
+            <Pagination currentPage={currentPage} onChangePageAC={(num:number)=> {
+                dispatch(onChangePageAC(num))
+            }}/>
         </>
     );
 };
