@@ -1,0 +1,22 @@
+.cart {
+
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.topImg {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.button {
+    background-color: #fff;
+    border-color: orange;
+}

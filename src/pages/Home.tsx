@@ -55,7 +55,7 @@ const Home = ({}: HomeProps) => {
                     isLoading
                         ? skeletons
                         : Array.isArray(items)
-                            ? items.map(el => <CoffeeBlock key={el.id} data={el}/>)
+                            ? items.map(el => <CoffeeBlock key={el.id} {...el}/>)
                             : ''
                 }
             </div>

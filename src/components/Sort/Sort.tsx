@@ -25,10 +25,6 @@ export function Sort({value, onChangeSort}: SortProps) {
         {name: 'алфавиту(ASC)', sortProperty: 'title'}
     ]
 
-    const onClickListItem = (obj: { name: string, sortProperty: string }) => {
-        onChangeSort(obj.name, obj.sortProperty)
-        setOpen(false)
-    }
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -36,14 +32,17 @@ export function Sort({value, onChangeSort}: SortProps) {
                 setOpen(false);
             }
         };
-        document.addEventListener('click', handleClickOutside);
+            document.addEventListener('click', handleClickOutside);
 
 
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
+        return () => document.removeEventListener('click', handleClickOutside);
     }, [open]);
 
+
+    const onClickListItem = (obj: { name: string, sortProperty: string }) => {
+        onChangeSort(obj.name, obj.sortProperty)
+        setOpen(false)
+    }
     const handleTogglePopup = () => {
         setOpen(prevState => !prevState);
     };

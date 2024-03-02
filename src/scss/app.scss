@@ -185,7 +185,7 @@
     }
   }
 
-  &_bottom {
+  &__bottom {
     margin: 50px 0;
 
     &-details {
@@ -211,6 +211,7 @@
         align-items: center;
         justify-content: center;
         width: 210px;
+        gap: 10px;
 
         }
 

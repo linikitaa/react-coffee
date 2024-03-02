@@ -1,16 +1,23 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
+import {useSelector} from "react-redux";
+import {HomeRootStateType} from "../../redux/store";
+import {initialSt} from "../../redux/reducers/cartReducer";
+
 import style from './header.module.scss'
 import logo from '../../assets/icons/logo.svg'
+
 import {Search} from "../Search/Search";
 
 
-type HeaderProps = {
 
-}
-export function Header({}:HeaderProps) {
+type HeaderProps = {}
 
+export function Header({}: HeaderProps) {
+
+    const {totalPrice, items} = useSelector<HomeRootStateType, initialSt>(state => state.cart)
+    const totalCount = items.reduce((acc,val)=> acc + val.count,0)
 
     return (
         <div className={style.header}>
@@ -22,13 +29,13 @@ export function Header({}:HeaderProps) {
                         <p>Самый реактивный кофе в мире</p>
                     </div>
                 </Link>
-                <Search />
+                <Search/>
             </div>
             <div className={style.cart}>
                 <Link to="/cart" className={'button button-cart'}>
-                    520р
+                    {totalPrice}р
                     <div className={'button_delimiter'}></div>
-                    3
+                    {totalCount}
                 </Link>
             </div>
         </div>
